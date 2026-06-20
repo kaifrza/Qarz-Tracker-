@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Qarz Tracker</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="variables.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="components.css">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+</head>
+<body>
+
+    <main class="app-container">
+        
+        <!-- DASHBOARD SCREEN -->
+        <section id="screen-dashboard" class="screen active">
+            <header class="top-header">
+                <h2>Dashboard</h2>
+            </header>
+            
+            <div class="content-area">
+                <!-- PREMIUM CREDIT CARD STYLE -->
+                <div class="premium-glass-card" id="mainSummaryCard">
+                    <div class="card-top-row">
+                        <span class="card-title"><i class="fa-solid fa-circle" style="font-size: 8px; color: var(--green); margin-right: 6px;"></i> DEBT LEDGER</span>
+                        <i class="fa-solid fa-wallet" style="font-size: 16px; opacity: 0.8;"></i>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <p class="card-subtitle">NET BALANCE</p>
+                        <h2 id="dashNetDebt" class="card-amount">₹0</h2>
+                        <p id="dashDebtStatus" style="font-size: 12px; opacity: 0.8; font-weight: 500; margin-top: 4px;">All cleared up!</p>
+                    </div>
+
+                    <div class="card-bottom-row">
+                        <div class="flow-item">
+                            <p class="flow-label"><i class="fa-solid fa-circle" style="font-size: 6px; color: var(--green); margin-right: 4px;"></i> Given (Inflow)</p>
+                            <h3 id="dashGiven" class="flow-amount text-green">₹0</h3>
+                        </div>
+                        <div class="flow-item" style="text-align: right;">
+                            <p class="flow-label" style="justify-content: flex-end;"><i class="fa-solid fa-circle" style="font-size: 6px; color: var(--red); margin-right: 4px;"></i> Taken (Outflow)</p>
+                            <h3 id="dashTaken" class="flow-amount text-red">₹0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 12px; margin-top: 24px;">Recent Activity</h3>
+                <div id="recentActivityList" style="margin-bottom: 30px;">
+
+                    <div class="empty-state-box">
+                        <i class="fa-solid fa-receipt empty-state-icon"></i>
+                        <p class="empty-state-text">No recent activity</p>
+                        <p class="empty-state-subtext">Transactions will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEDGERS SCREEN -->
+        <section id="screen-ledgers" class="screen">
+            <header class="top-header">
+                <h2>Ledgers</h2>
+            </header>
+            
+            <div class="content-area">
+                <div class="input-group" style="position: relative;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 16px; top: 18px; color: var(--text-muted);"></i>
+                    <input type="text" id="searchPerson" class="input-field" placeholder="Search friends..." style="padding-left: 45px; border-radius: 999px;">
+                </div>
+
+                <div id="peopleListContainer">
+                    <div class="empty-state-box">
+                        <i class="fa-solid fa-user-group empty-state-icon"></i>
+                        <p class="empty-state-text">No ledgers found</p>
+                        <p class="empty-state-subtext">Tap the + button to add a friend</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WALLET SCREEN -->
+                <!-- WALLET SCREEN -->
+        <section id="screen-wallet" class="screen">
+            <header class="top-header">
+                <h2>My Wallet</h2>
+            </header>
+            
+            <div class="content-area">
+                <!-- PREMIUM CREDIT CARD STYLE -->
+                <div class="premium-glass-card">
+                    <div class="card-top-row">
+                        <span class="card-title"><i class="fa-solid fa-circle" style="font-size: 8px; color: var(--primary); margin-right: 6px;"></i> MY WALLET</span>
+                        <i class="fa-solid fa-credit-card" style="font-size: 16px; opacity: 0.8;"></i>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <p class="card-subtitle">AVAILABLE BALANCE</p>
+                        <h2 id="walletBalance" class="card-amount">₹0</h2>
+                    </div>
+
+                    <div class="card-bottom-row">
+                        <div class="flow-item">
+                            <p class="flow-label"><i class="fa-solid fa-circle" style="font-size: 6px; color: var(--green); margin-right: 4px;"></i> Income</p>
+                            <h3 id="walletIncome" class="flow-amount text-green">₹0</h3>
+                        </div>
+                        <div class="flow-item" style="text-align: right;">
+                            <p class="flow-label" style="justify-content: flex-end;"><i class="fa-solid fa-circle" style="font-size: 6px; color: var(--red); margin-right: 4px;"></i> Expense</p>
+                            <h3 id="walletExpense" class="flow-amount text-red">₹0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE LEVEL FILTER (Moved Right Below the Card!) -->
+                <div class="segmented-control" style="background: var(--surface); border: 1.5px solid var(--border); margin-bottom: 24px;">
+                    <input type="radio" id="filterAll" name="walletTimeFilter" value="all" checked>
+                    <label for="filterAll" class="segment-label" style="padding: 8px; font-size: 12px;">All Time</label>
+                    
+                    <input type="radio" id="filterMonth" name="walletTimeFilter" value="month">
+                    <label for="filterMonth" class="segment-label" style="padding: 8px; font-size: 12px;">This Month</label>
+                    
+                    <input type="radio" id="filterWeek" name="walletTimeFilter" value="week">
+                    <label for="filterWeek" class="segment-label" style="padding: 8px; font-size: 12px;">This Week</label>
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 12px;">Spending Breakdown</h3>
+                <div id="walletCategoryBreakdown" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px;">
+                    <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; grid-column: span 2;">No expenses yet.</div>
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 12px;">Recent Transactions</h3>
+                <div id="walletTxList" style="margin-bottom: 30px;">
+                    <div class="empty-state-box">
+                        <i class="fa-solid fa-wallet empty-state-icon"></i>
+                        <p class="empty-state-text">No wallet transactions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SETTINGS SCREEN -->
+        <section id="screen-settings" class="screen">
+            <header class="top-header">
+                <h2>Settings</h2>
+            </header>
+            
+            <div class="content-area">
+                <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 12px; margin-top: 10px; color: var(--text-muted); letter-spacing: 1px;">Profile</h3>
+                <div class="card">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="text-muted fw-bold" style="display: block; margin-bottom: 8px; font-size: 11px;">YOUR NAME (For Statements)</label>
+                        <input type="text" id="settingMyName" class="input-field" placeholder="E.g. Kaif">
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Payment Settings</h3>
+                    <div class="input-group">
+                        <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">MY UPI ID (For receiving payments)</label>
+                        <input type="text" id="settingUpiId" class="input-field" placeholder="e.g. kaif@ybl" style="margin-top: 8px;">
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">This will be used to generate WhatsApp payment links and QR codes.</p>
+                </div>
+                
+                <div class="card" style="margin-top: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">WhatsApp Template</h3>
+                    <div class="input-group">
+                        <textarea id="settingWaMessage" class="input-field" rows="3" style="margin-top: 8px; resize: none; font-size: 14px;" placeholder="Hi [Name], tera [Amount] Rs baaki hai..."></textarea>
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                        Magic Tags: Use <b>[Name]</b> and <b>[Amount]</b> to auto-fill details in your message.
+                    </p>
+                </div>
+
+                <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 12px; margin-top: 24px; color: var(--text-muted); letter-spacing: 1px;">Customization</h3>
+                <div class="card" id="manageCategoriesBtn" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 16px; cursor: pointer;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 16px;">
+                            <i class="fa-solid fa-shapes"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 700;">Manage Categories</h4>
+                            <p class="text-muted" style="font-size: 12px; margin-top: 2px;">Add custom icons & colors</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </div>
+
+                <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 12px; margin-top: 24px; color: var(--text-muted); letter-spacing: 1px;">Preferences</h3>
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 16px;">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700;">Dark Mode</h4>
+                        <p class="text-muted" style="font-size: 12px; margin-top: 2px;">Switch to dark theme</p>
+                    </div>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 16px; margin-top: 10px;">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700;">Haptic Feedback</h4>
+                        <p class="text-muted" style="font-size: 12px; margin-top: 2px;">Vibrate on tap</p>
+                    </div>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="hapticToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                                
+
+
+                <!-- DATA MANAGEMENT (BACKUP & RESTORE) -->
+                <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 12px; margin-top: 24px; color: var(--text-muted); letter-spacing: 1px;">Data Management</h3>
+                <div class="card" style="margin-top: 0;">
+                    <div style="display: flex; gap: 10px;">
+                        <button id="exportDataBtn" class="btn" style="flex: 1; background: var(--primary); color: white; padding: 12px; font-size: 14px; border-radius: 8px;">
+                            <i class="fa-solid fa-upload"></i> Backup
+                        </button>
+                        <button id="importDataBtn" class="btn" style="flex: 1; background: var(--border); color: var(--text-main); padding: 12px; font-size: 14px; border-radius: 8px;">
+                            <i class="fa-solid fa-download"></i> Restore
+                        </button>
+                        <!-- Hidden file input for file selection -->
+                        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">Download your data to keep it safe, or restore it on a new device.</p>
+                </div>
+
+                <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 12px; margin-top: 24px; color: var(--red); letter-spacing: 1px;">Danger Zone</h3>
+                <div class="card" style="border: 1px solid var(--red-bg);">
+                    <button id="clearDataBtn" class="btn" style="background: var(--red-bg); color: var(--red); border-radius: 8px; padding: 12px;">Clear All Data</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px; margin-bottom: 20px; color: var(--text-muted); font-size: 13px;">
+                    <p style="
+                 font-weight:700;
+                color:var(--primary);">
+                QARZ TRACKER 
+                v2.0 
+                </p>
+                    <p style="margin-top: 4px;">Made with ❤️ by KAIF RAZA</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADD / EDIT TRANSACTION MODAL (PREMIUM UI) -->
+    <div id="addTransactionModal" class="modal bottom-sheet">
+        <div class="modal-content premium-modal">
+            
+            <!-- SWIPE DRAG HANDLE -->
+            <div id="modalDragHandle" class="drag-handle"></div>
+            
+            <button type="button" id="closeModalBtn" class="premium-close-btn"><i class="fa-solid fa-times"></i></button>
+            <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 20px; text-align: center;">New Transaction</h3>
+            
+            <form id="addTransactionForm" style="display: flex; flex-direction: column; gap: 16px;">
+                
+                <!-- 1-Tap Category Switcher -->
+                <div class="segmented-control" style="background: var(--surface); border: 1.5px solid var(--border);">
+                    <input type="radio" id="catDebt" name="txCategoryRadio" value="debt" checked>
+                    <label for="catDebt" class="segment-label">Friend / Ledger</label>
+                    
+                    <input type="radio" id="catWallet" name="txCategoryRadio" value="wallet">
+                    <label for="catWallet" class="segment-label">My Wallet</label>
+                </div>
+
+                <!-- GIVEN / TAKEN Switcher -->
+                <div class="segmented-control">
+                    <input type="radio" id="typeGiven" name="txType" value="given" checked>
+                    <label for="typeGiven" id="labelGiven" class="segment-label">GIVEN (I Gave)</label>
+                    
+                    <input type="radio" id="typeTaken" name="txType" value="taken">
+                    <label for="typeTaken" id="labelTaken" class="segment-label">TAKEN (I Took)</label>
+                </div>
+
+                <div class="input-group" id="personInputGroup">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Person Name</label>
+                    <input type="text" id="txPerson" class="input-field premium-input" placeholder="e.g. Kaif">
+                </div>
+
+                <!-- 1-Tap Spend Category Chips (Horizontal Scroll) -->
+                <div class="input-group" id="categoryInputGroup" style="display: none;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Spend Category</label>
+                    <div class="chip-group">
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Food 🍔" checked><span class="chip-text">Food 🍔</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Travel 🚂"><span class="chip-text">Travel 🚂</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Electronics 📱"><span class="chip-text">Electronics 📱</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Tech 💻"><span class="chip-text">Tech 💻</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Entertainment 🍿"><span class="chip-text">Entertainment 🍿</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Income 💰"><span class="chip-text">Income 💰</span></label>
+                        <label class="chip-label"><input type="radio" name="txSpendCatRadio" value="Other 📦"><span class="chip-text">Other 📦</span></label>
+                    </div>
+                </div>
+
+                <div class="input-group" style="position: relative;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Amount</label>
+                    <span style="position: absolute; left: 16px; top: 38px; font-weight: 800; color: var(--text-main); font-size: 16px;">₹</span>
+                    <input type="number" id="txAmount" class="input-field premium-input" placeholder="0" style="padding-left: 36px; font-size: 16px; font-weight: 700;" required>
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Date & Time</label>
+                    <input type="datetime-local" id="txDateTime" class="input-field premium-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Note (Optional)</label>
+                    <input type="text" id="txNote" class="input-field premium-input" placeholder="What was this for?">
+                </div>
+
+                <button type="submit" class="btn btn-primary premium-save-btn" style="margin-top: 10px; font-size: 16px; padding: 14px;">Save Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="screen-dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Home</span>
+        </button>
+        
+        <button class="nav-item" data-target="screen-ledgers">
+            <i class="fa-solid fa-users"></i>
+            <span>Ledgers</span>
+        </button>
+
+        <div class="nav-item center-add">
+            <button id="mainAddBtn" class="add-fab">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <button class="nav-item" data-target="screen-wallet">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Wallet</span>
+        </button>
+
+        <button class="nav-item" data-target="screen-settings">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- PERSON STATEMENT PANEL -->
+    <div id="personStatementPanel" class="slide-panel">
+        <header class="top-header" style="display: flex; align-items: center; gap: 15px; padding-bottom: 10px;">
+            <button id="closeStatementBtn" style="font-size: 20px; color: var(--text-main); padding: 5px;"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2 id="statementPersonName" style="flex: 1; font-size: 22px;">Name</h2>
+        </header>
+        
+        <div class="content-area" style="padding-top: 10px;">
+            <div class="card" id="statementSummaryCard" style="text-align: center; padding: 20px;">
+                <p class="text-muted fw-bold" id="statementStatus" style="font-size: 12px; text-transform: uppercase;">NET BALANCE</p>
+                <h2 id="statementNetBalance" style="font-size: 28px; margin: 5px 0;">₹0</h2>
+            </div>
+            
+            <h3 style="font-size: 15px; margin: 20px 0 12px;">Transaction History</h3>
+            <div id="statementTxList" style="margin-bottom: 30px;">
+            </div>
+        </div>
+        
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 20px; background: var(--surface); box-shadow: 0 -4px 20px rgba(0,0,0,0.05); display: flex; gap: 12px; z-index: 10;">
+            <button class="btn btn-primary" id="downloadPdfBtn" style="flex: 1; background: var(--text-main); color: var(--bg-color);"><i class="fa-solid fa-file-pdf"></i> Save PDF</button>
+            
+            <button class="btn btn-primary" id="sharePdfBtn" style="flex: 1;"><i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Share</button>
+        </div>
+    </div>
+    
+    <!-- QR CODE MODAL -->
+    <div id="qrModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);">
+        <div class="card" style="background: var(--surface); width: 85%; max-width: 320px; padding: 30px 20px; text-align: center; border-radius: 24px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <button onclick="document.getElementById('qrModal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: var(--bg-color); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer;"><i class="fa-solid fa-times"></i></button>
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 5px; color: var(--text-main);">Scan & Pay</h2>
+            <p id="qrPersonName" style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;"></p>
+            
+            <div style="background: white; padding: 16px; border-radius: 20px; display: inline-block; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.05);">
+                <img id="qrImage" src="" style="width: 200px; height: 200px; display: block; border-radius: 8px;">
+            </div>
+            
+            <h1 id="qrAmountText" class="text-green" style="font-size: 36px; font-weight: 900; margin-top: 24px; letter-spacing: -1px;"></h1>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <i class="fa-solid fa-shield-halved"></i> Supported by GPay, PhonePe, Paytm
+            </p>
+        </div>
+    </div>
+
+    <div id="manageCategoriesPanel" class="slide-panel">
+        <header class="top-header" style="display: flex; align-items: center; gap: 15px; padding-bottom: 10px;">
+            <button id="closeCategoriesBtn" style="font-size: 20px; color: var(--text-main); padding: 5px; background: none; border: none; cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2 style="flex: 1; font-size: 22px;">Categories</h2>
+            <button id="addNewCategoryBtn" style="background: var(--primary); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(99,102,241,0.4);"><i class="fa-solid fa-plus"></i></button>
+        </header>
+        <div class="content-area" style="padding-top: 10px;" id="categoriesListContainer">
+            </div>
+    </div>
+
+    <div id="createCategoryModal" class="modal">
+        <div class="modal-content premium-modal">
+            <button type="button" id="closeCreateCategoryBtn" class="premium-close-btn"><i class="fa-solid fa-times"></i></button>
+            <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 20px; text-align: center;">New Category</h3>
+            
+            <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+                <div id="liveCategoryPreview" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 30px; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--primary); color: var(--primary); transition: all 0.3s ease;">
+                    <i id="previewIcon" class="fa-solid fa-star" style="font-size: 16px;"></i>
+                    <span id="previewName" style="font-size: 14px; font-weight: 800;">New Category</span>
+                </div>
+            </div>
+
+            <form id="createCategoryForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="input-group">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Category Name</label>
+                    <input type="text" id="newCatName" class="input-field premium-input" placeholder="e.g. Gym, Pets, Stocks" required maxlength="15">
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Select Icon</label>
+                    <div id="iconPickerGrid" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;">
+                        <div class="icon-option active" data-icon="fa-star"><i class="fa-solid fa-star"></i></div>
+                        <div class="icon-option" data-icon="fa-dumbbell"><i class="fa-solid fa-dumbbell"></i></div>
+                        <div class="icon-option" data-icon="fa-plane"><i class="fa-solid fa-plane"></i></div>
+                        <div class="icon-option" data-icon="fa-gamepad"><i class="fa-solid fa-gamepad"></i></div>
+                        <div class="icon-option" data-icon="fa-heart"><i class="fa-solid fa-heart"></i></div>
+                        <div class="icon-option" data-icon="fa-paw"><i class="fa-solid fa-paw"></i></div>
+                        <div class="icon-option" data-icon="fa-car"><i class="fa-solid fa-car"></i></div>
+                        <div class="icon-option" data-icon="fa-house"><i class="fa-solid fa-house"></i></div>
+                        <div class="icon-option" data-icon="fa-graduation-cap"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div class="icon-option" data-icon="fa-bolt"><i class="fa-solid fa-bolt"></i></div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Select Color</label>
+                    <div id="colorPickerGrid" style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;">
+                        <div class="color-option active" data-color="#6366f1" style="background: #6366f1;"></div>
+                        <div class="color-option" data-color="#ef4444" style="background: #ef4444;"></div>
+                        <div class="color-option" data-color="#22c55e" style="background: #22c55e;"></div>
+                        <div class="color-option" data-color="#f59e0b" style="background: #f59e0b;"></div>
+                        <div class="color-option" data-color="#8b5cf6" style="background: #8b5cf6;"></div>
+                        <div class="color-option" data-color="#ec4899" style="background: #ec4899;"></div>
+                        <div class="color-option" data-color="#0ea5e9" style="background: #0ea5e9;"></div>
+                        <div class="color-option" data-color="#64748b" style="background: #64748b;"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary premium-save-btn" style="margin-top: 10px; font-size: 16px; padding: 14px;">Save Category</button>
+            </form>
+        </div>
+    </div>
+
+       <!-- DYNAMIC CONFIRMATION MODAL -->
+    <div id="customConfirmModal" class="modal">
+        <div class="modal-content premium-modal" style="max-width: 340px; text-align: center; padding: 28px 20px;">
+            
+            <div id="confirmIconBox" style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            
+            <h3 id="confirmModalTitle" style="font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main);">Title</h3>
+            <p id="confirmModalMessage" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">Message</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="dynamicConfirmBtn" class="btn" style="color: white; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; width: 100%; border: none;">Yes</button>
+                <button id="dynamicCancelBtn" class="btn" style="background: var(--surface); border: 1.5px solid var(--border); color: var(--text-muted); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('ServiceWorker rock-solid and running! Scope:', registration.scope);
+                }).catch((error) => {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+            });
+        }
+    </script>
+
+    
+    <script src="storage.js"></script>
+    <script src="ui.js"></script>
+    <script src="pdf-export.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
